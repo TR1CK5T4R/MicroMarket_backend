@@ -3,11 +3,15 @@ const path = require('path');
 const fs = require('fs');
 
 // ── Temp upload directory ───────────────────────────────────
-// Files land here first, get uploaded to Cloudinary, then
-// the local copy is deleted (success or failure).
-const UPLOAD_DIR = path.join(__dirname, '..', '..', 'uploads', 'temp');
+// Vercel's filesystem is read-only except /tmp.
+// Local dev:   uploads/temp/  (easy to inspect)
+// Production:  /tmp           (only writable path on serverless)
+const UPLOAD_DIR =
+    process.env.NODE_ENV === 'production'
+        ? '/tmp'
+        : path.join(__dirname, '..', '..', 'uploads', 'temp');
 
-// Ensure the temp dir exists at startup
+// Ensure the temp dir exists at startup (no-op on Vercel where /tmp always exists)
 if (!fs.existsSync(UPLOAD_DIR)) {
     fs.mkdirSync(UPLOAD_DIR, { recursive: true });
 }

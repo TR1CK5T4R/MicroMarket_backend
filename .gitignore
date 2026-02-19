@@ -137,3 +137,6 @@ dist
 
 # SvelteKit build / generate output
 .svelte-kit
+
+# Local temp image uploads (uploaded to Cloudinary then deleted)
+uploads/

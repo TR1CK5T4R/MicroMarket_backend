@@ -30,7 +30,11 @@ const rateLimit = require('express-rate-limit');
 // Rate limiting
 const limiter = rateLimit({
     windowMs: 10 * 60 * 1000, // 10 minutes
-    max: 100 // limit each IP to 100 requests per windowMs
+    max: 100, // limit each IP to 100 requests per windowMs
+    standardHeaders: true,   // return RateLimit-* headers
+    legacyHeaders: false,
+    // Required when behind Vercel / any reverse proxy — reads X-Forwarded-For
+    validate: { trustProxy: false },
 });
 app.use(limiter);
 
